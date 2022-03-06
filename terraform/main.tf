@@ -1,3 +1,4 @@
 module "ec2" {
-     source = "."
+     source = "creds.tf"
+     source = "aws.tf"
 }
