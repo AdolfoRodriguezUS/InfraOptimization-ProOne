@@ -1,2 +1,4 @@
 aerdevopsserver.pem
+*.pem
+**/terraform/creds.tf
 terraform/creds.tf
