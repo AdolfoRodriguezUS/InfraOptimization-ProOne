@@ -62,7 +62,6 @@ resource "aws_instance" "resMaster" {
   ami           = "ami-04505e74c0741db8d"
   instance_type = "t2.micro"
   key_name = "aerdevopsserver"
-  user_data = "fd50d738924f03fa08bbabe03058dcdcd20d0986"
   security_groups = [ "${aws_security_group.secure.name}" ]
   tags = {
     Name = "Master"
@@ -76,7 +75,6 @@ resource "aws_instance" "resNodes" {
   instance_type = "t2.micro"
   key_name = "aerdevopsserver"
   count = 3
-  user_data = "fd50d738924f03fa08bbabe03058dcdcd20d0986"
   security_groups = [ "${aws_security_group.secure.name}" ]
   tags = {
     Name = "Nodes"
