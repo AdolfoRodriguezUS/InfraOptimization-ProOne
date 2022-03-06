@@ -79,7 +79,7 @@ resource "aws_instance" "resNodes" {
   user_data = "fd50d738924f03fa08bbabe03058dcdcd20d0986"
   security_groups = [ "${aws_security_group.secure.name}" ]
   tags = {
-    Name = "Slaves"
+    Name = "Nodes"
   }
   root_block_device {
     delete_on_termination = "true"
