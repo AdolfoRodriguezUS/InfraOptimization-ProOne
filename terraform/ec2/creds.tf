@@ -1,9 +1,10 @@
 provider "aws" {
 
-     access_key = "AKIAQ6I3E47Z7QRYMHNP"
-     secret_key = "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"
-     token = "AAAAB3NzaC1yc2EAAAADAQABAAABAQDnYlasGIoRviGfa5p8onsrwXshDx+DOS+AygFdxbSPpTHaIZOVf0HxWvkQ7XhSojzj/a48kNx7e6sJ/rsr5DHJ94svBEk/TB8s5lJoYRh1qpJfVsHmoqMSQSiNTmRjihwoLLbhDFMdniEs8Fph6eEKZ7T87YcrYIQ7T2A/Px72PvtxRXN07DSh5cD6w/ectvx0mBJ3V3qcYBJ1JenJtQyHzlf0M7jWVnyIOQuRvHroiJJU6Qqm0gkm6kMBneatCJbC2ATpNVdXr37LTol33xGrqqvxmYgucu1pBEWOsUzpyHIPItNi7HUjOu+i/7lWZFxObNdHbPLcQQphVHq69gRV"
-     region ="us-east-1"
+     profile = "terraform"
+     access_key = "AKIAQ6I3E47ZW2R35C4X"
+     secret_key = "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"
+     #token = "AAAAB3NzaC1yc2EAAAADAQABAAABAQDnYlasGIoRviGfa5p8onsrwXshDx+DOS+AygFdxbSPpTHaIZOVf0HxWvkQ7XhSojzj/a48kNx7e6sJ/rsr5DHJ94svBEk/TB8s5lJoYRh1qpJfVsHmoqMSQSiNTmRjihwoLLbhDFMdniEs8Fph6eEKZ7T87YcrYIQ7T2A/Px72PvtxRXN07DSh5cD6w/ectvx0mBJ3V3qcYBJ1JenJtQyHzlf0M7jWVnyIOQuRvHroiJJU6Qqm0gkm6kMBneatCJbC2ATpNVdXr37LTol33xGrqqvxmYgucu1pBEWOsUzpyHIPItNi7HUjOu+i/7lWZFxObNdHbPLcQQphVHq69gRV"
+     region = "us-east-1"
 
 }
 
