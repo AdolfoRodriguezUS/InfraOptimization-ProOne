@@ -1,0 +1,17 @@
+-  name: Configure Master Node
+   hosts: tag_Name_MasterU
+   ignore_errors: yes
+   vars_files:
+       - vars.yml
+   roles:
+       - master
+
+
+-  name: Configuring Worker Nodes
+   hosts: tag_Name_NodesU
+   ignore_errors: yes
+   become: yes
+   vars_files:
+       - vars.yml
+   roles:
+       - nodes
