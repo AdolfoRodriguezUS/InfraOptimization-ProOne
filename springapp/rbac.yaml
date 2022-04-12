@@ -1,0 +1,27 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+   name: role-pods
+   namespace: sqlgres
+rules:
+   - apiGroups: ["*"]
+     resources: ["pods"]
+     verbs: ["get", "list", "create", "update", "delete"]
+
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rolebinding-pods
+  namespace: postsql
+subjects:
+  - apiGroup: ""
+    kind: User
+    name: adolfo
+roleRef:
+    apiGroup: ""
+    kind: Role
+    name: role-pods
