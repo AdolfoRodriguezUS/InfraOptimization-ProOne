@@ -1,0 +1,10 @@
+aerdevopsserver.pem
+aerdevopsrv2.pem
+Aerdevopsrv2.pem
+*.pem
+**/terraform/creds.tf
+/terraform/ec2/creds.tf
+**/terraform/ec2/creds.tf
+ec2/creds.tf
+terraform/creds.tf
+creds.tf

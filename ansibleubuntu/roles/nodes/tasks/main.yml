@@ -1,0 +1,4 @@
+        - include:  1_initialize.yml
+        - include:  2_configure_masteru.yml
+
+

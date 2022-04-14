@@ -1,0 +1,150 @@
+-  name: "Creating Basic MySQL Operator for Kubernetes Objects and Cluster Instances - HELM"
+   hosts: tag_Name_Master
+   tasks:
+
+           -  name: "Create MySQL Operator CRD (Custom Resource Definition)"
+              command: sudo kubectl apply -f https://raw.githubusercontent.com/mysql/mysql-operator/trunk/deploy/deploy-crds.yaml
+              register: kcrd_out
+
+           -  name: "checking CRD output"
+              debug:
+                 msg: "{{ kcrd_out }}"
+
+           -  name: "Create MySQL Operator Object in Cluster"
+              command: sudo kubectl apply -f https://raw.githubusercontent.com/mysql/mysql-operator/trunk/deploy/deploy-operator.yaml
+              register: koper_out
+           
+           -  name: "checking CRD output"
+              debug:
+                 msg: "{{ koper_out }}"
+
+           -  name: "Install Snap update - Step 1"
+              yum:
+                  name: epel-release
+                  state: present
+                  update_cache: true
+              become: true
+        
+           -  name: "Install Snap Service installed - Step 2" 
+              yum:
+                  name: snapd
+                  state: present
+                  update_cache: true
+              become: true
+
+
+           -  name: "Install Snap Service enabled - Step 3" 
+              systemd:
+                   name: snapd.socket
+                   enabled: yes
+                   state: started 
+           
+           - stat: path=/var/lib/snapd/snap
+             register: snapath
+
+           -  name: "Install snap command link - Step 4"
+              command: sudo ln -s /var/lib/snapd/snap /snap
+              when: snapath.stat.exists == False         
+  
+           -  name: "Install Helm"
+              snap:
+                      name: helm
+                      classic: true
+                      state: present
+              register: helm_out
+              
+           -  name: "Helm Installation..."
+              debug:
+                 msg: "{{ helm_out }}"
+
+           -  stat: path=/usr/bin/helm
+              register: helmpath
+
+           -  name: "Install HELM link"
+              command: sudo ln -s /var/lib/snapd/snap/bin/helm   /usr/bin/helm
+              when: helmpath.stat.exists == False
+
+           -  name: "Update Repos for MySQL"
+              command: sudo helm repo add mysql-operator https://mysql.github.io/mysql-operator/
+              register: mysq_out
+           
+
+           -  name: "output repo addition"
+              debug:
+                 msg: "{{ mysq_out }}"
+
+           -  name: "repo update"
+              command: sudo helm repo update
+              register: repo_out
+           -  name: "output repo update..."
+              debug:
+                 msg: "{{ repo_out }}"
+             
+           -  name: "clean pre-existing mysql operator"
+              command:  sudo helm uninstall my-mysql-operator mysql-operator/mysql-operator --namespace mysql-operator
+              ignore_errors: yes
+
+
+           -  name: "Create MySQL Operator CRD (Custom Resource Definition) and cluster creation"          
+              command: sudo helm install my-mysql-operator mysql-operator/mysql-operator --version 8.0.28-2.0.3 --namespace mysql-operator --create-namespace
+              register: crd_out
+              ignore_errors: yes
+
+           -  name: "checking CRD output and MySQL Operator with HELM"
+              debug: 
+                 msg: "{{ crd_out }}"
+
+           -  name: "clean pre-existing mysql cluster"
+              command:  sudo helm uninstall sqlcluster
+              ignore_errors: yes
+
+           -  name: "Create MySQL Operator Object in Cluster"
+              command: sudo helm install sqlcluster mysql-operator/mysql-innodbcluster --version 8.0.28-2.0.3 --namespace mysql-innodbcluster --create-namespace --set credentials.root.user='root' --set credentials.root.password='aerdevopssecret' --set credentials.root.host='%' --set serverInstances=3 --set routerInstances=1 --devel
+              register: oper_out
+
+           -  name: "Get MySQL Operator Deployment Data"
+              command: sudo kubectl get deployment -n mysql-operator mysql-operator -o wide
+              register: oper_deploy_out
+
+           -  name: "checking Operator Deployment output"
+              debug:
+                 msg: "{{ oper_out }}"
+           -  name: "output.... "
+              debug:
+                 msg: "{{ oper_deploy_out }}"
+
+                 #-  name: "Create Secret for MySQL Cluster"
+                 #command: kubectl create secret generic mypwds --from-literal=rootUser=root --from-literal=rootHost=% --from-literal=rootPassword="10aerodriguez2022"
+                 #register: mypwd_out
+
+           -  name: "Create Deployment File for Cluster"
+              copy:
+                  src: "./files/msql_cluster.yml"
+                  dest: "/k8s/msql_cluster.yml"
+                  force: yes
+
+                  #-  name: "Run Deployment File for New MySQL Cluster"
+                  #command: kubectl apply -f /k8s/msql_cluster.yml
+                  # register: msql_cluster_out
+
+                  #-  name: "checking Cluster Deployment file"
+                  #debug: 
+                  #msg: "{{  msql_cluster_out }}"
+
+           -  name: "Get MySQL Service Description"
+              command: sudo kubectl describe service sqlcluster
+              register: service_out
+
+           -  name: "Get Database MySQL InnoDBCluster"
+              command: sudo kubectl get innodbcluster
+              register: innodb_out
+
+           -  name: "checking MySQL Cluster Variables"
+              debug:
+                 msg: "{{ innodb_out }}"
+
+           -  name: "service output"
+              debug:
+                 msg: "{{ service_out }}"
+       
+             
