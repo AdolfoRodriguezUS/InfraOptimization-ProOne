@@ -4,7 +4,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
    name: role-pods
-   namespace: sqlgres
+   namespace: postsql
 rules:
    - apiGroups: ["*"]
      resources: ["pods"]
@@ -25,3 +25,4 @@ roleRef:
     apiGroup: ""
     kind: Role
     name: role-pods
+---

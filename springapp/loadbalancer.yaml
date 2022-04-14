@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: postsql-lb
+spec:
+    selector:
+        app: springflow
+    ports:
+        - port: 8080
+          targetPort: 8080
+    type: LoadBalancer
+---

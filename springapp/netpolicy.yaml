@@ -1,0 +1,17 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+   name: allow-ingress
+   namespace: postsql
+spec:
+   podSelector:
+      matchLabels:
+         role: backend
+   ingress:
+     - from:
+        - podSelector:
+            matchLabels:
+               role: frontend
+       ports:
+         - protocol: TCP
+           port: 5432
