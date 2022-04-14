@@ -1,10 +1,10 @@
-    1  kubectl get nodes
-    2  mkdir springapp
-    3  cd springapp
-    4  ssh-keygen
-    5  vi /roo/.ssh/id_rsa.pub
-    6  cat /root/.ssh/id_rsa.pub
-    7  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTtlxoC74kUUiSC5nIAS8NdyKUO/eeSEzH/powVCbJ7wvdQd6g3Rd0q1q4hXRF689FewcXJ/JSNShDjB5cwh20sHzpVpV9TARyP9DutOog16tJ8N3FCq4jBTqnisRoglKZQRK90kgfV+ipVsj0TDkuXsQ//HWw05klKx+0QL44VCZcZixLWTtHW84gs67GEKqVVjpVnRLY66+H1EBvLfDDt8TEPmZnl0qUo1GhWVF8BOQCprLsIkC8V/oW7ZKAdKx0qsGb+9J3JPTDmbUp++V9PnbRWCFEH0dOU4LgtOneibF+/o41/VNoYqwQRjr4A95tFoPvOaLN42C3OKfAOrPd root@ip-172-31-6-66.ec2.internal
+
+
+
+
+
+
+
     8  ls
     9  mkdir springapp
    10  git initi
