@@ -1,9 +1,0 @@
--  name: Joining Worker Nodes to Master
-   hosts: tag_Name_NodesU
-   become: yes
-   become_user: ubuntu 
-   vars_files:
-          - vars.yml
-   tasks:
-          -  name: "Running Master's token to all the Worker Nodes..."
-             command: "{{ token }}"

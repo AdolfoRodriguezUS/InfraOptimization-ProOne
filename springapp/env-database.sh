@@ -1,0 +1,6 @@
+echo "Setting Spring Variables"
+export SPRING_DATASOURCE_URL="jdbc:postgres://10.102.161.155:3306/database"
+export SPRING_DATASOURCE_USERNAME="postgres"
+export SPRING_DATASOURCE_PASSWORD="passgres"
+export SPRING_DATASOURCE_DRIVER_CLASS_NAME="org.postgresql.Driver"
+echo "Finished"

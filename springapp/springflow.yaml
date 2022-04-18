@@ -1,0 +1,49 @@
+
+---
+#Create the Deployment for an Instance of the Dataflow Application to connect to Postgresql
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   labels:
+       app: springflow
+   name: springflow
+   namespace: postsql
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: springflow
+         role: frontend
+   template:
+      metadata:
+        labels:
+          app: springflow
+          role: frontend
+      spec:
+        containers:
+        - image: bitnami/spring-cloud-dataflow
+          name: springflow
+          ports:
+          - containerPort: 8080
+            name: springflow
+          resources:
+            limits:
+              cpu: 200m 
+
+---
+## Launch the Application Service
+apiVersion: v1
+kind: Service
+metadata:
+   labels:
+      app: springflow
+   name: springflow
+   namespace: postsql
+spec:
+   type: NodePort
+   ports:
+      - port: 8080
+   selector:
+      app: springflow
+
+---

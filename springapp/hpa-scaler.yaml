@@ -1,0 +1,15 @@
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: springql-hpa-scaler
+  namespace: postsql
+spec: 
+    scaleTargetRef:
+       apiVersion: apps/v1
+       name: springflow 
+       kind: Deployment
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 50
+---
