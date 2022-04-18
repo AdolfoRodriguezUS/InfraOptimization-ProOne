@@ -1,0 +1,44 @@
+apiVersion: pxc.percona.com/v1-6-0
+kind: PerconaXtraDBCluster
+metadata:
+  name: monitoring
+spec:
+  secretsName: my-cluster-secrets
+  sslSecretName: some-name-ssl
+  pxc:
+    size: 3
+    image: -pxc
+    resources:
+      requests:
+        memory: 500M
+        cpu: 300m
+    volumeSpec:
+      persistentVolumeClaim:
+        resources:
+          requests:
+            storage: 2Gi
+    affinity:
+      antiAffinityTopologyKey: none
+  haproxy:
+    enabled: true
+    size: 1
+    image: -haproxy
+    resources:
+      requests:
+        memory: 500M
+        cpu: 300m
+    affinity:
+      antiAffinityTopologyKey: none
+  pmm:
+    enabled: true
+    image: -pmm
+    serverHost: monitoring-service
+    serverUser: admin
+    pxcParams: "--disable-tablestats-limit=2000"
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1000M
+      requests:
+        cpu: 308m
+        memory: 508M

@@ -1,0 +1,7 @@
+- hosts: tag_Name_MasterU, tag_Name_NodesU 
+  become: yes
+  tasks:
+  - name: Initial
+    import_role:
+      name: common
+      tasks_from: initial

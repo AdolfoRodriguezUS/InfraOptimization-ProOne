@@ -1,0 +1,150 @@
+apiVersion: pxc.percona.com/v1
+kind: PerconaXtraDBCluster
+metadata:
+  name: haproxy
+  finalizers:
+    - delete-pxc-pods-in-order
+spec:
+  secretsName: my-cluster-secrets
+  vaultSecretName: haproxy-vault
+  pause: false
+  pxc:
+    size: 3
+    image: -pxc
+    resources:
+      requests:
+        memory: 0.1G
+        cpu: 100m
+      limits:
+        memory: "1G"
+        cpu: "1"
+    volumeSpec:
+      persistentVolumeClaim:
+        resources:
+          requests:
+            storage: 2Gi
+    affinity:
+      antiAffinityTopologyKey: "kubernetes.io/hostname"
+    podDisruptionBudget:
+      maxUnavailable: 1
+    runtimeClassName: docker-rc
+  haproxy:
+    enabled: true
+    size: 3
+    image: -haproxy
+    livenessProbes:
+      initialDelaySeconds: 61
+      timeoutSeconds: 6
+      periodSeconds: 31
+      successThreshold: 1
+      failureThreshold: 5
+    affinity:
+      antiAffinityTopologyKey: "kubernetes.io/hostname"
+    tolerations:
+    - key: "node.alpha.kubernetes.io/unreachable"
+      operator: "Exists"
+      effect: "NoExecute"
+      tolerationSeconds: 6000
+    podDisruptionBudget:
+      maxUnavailable: 2
+    sidecars:
+    - image: busybox
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do trap 'exit 0' SIGINT SIGTERM SIGQUIT SIGKILL; done;"]
+      name: my-sidecar-1
+    - image: busybox
+      name: haproxy
+    runtimeClassName: docker-rc
+    configuration: |
+      global
+        maxconn 1024
+        external-check
+        insecure-fork-wanted
+        stats socket /etc/haproxy/pxc/haproxy.sock mode 600 expose-fd listeners level admin
+
+      defaults
+        log global
+        mode tcp
+        retries 13
+        timeout client 28800s
+        timeout connect 100500
+        timeout server 28800s
+
+      frontend galera-in
+        bind *:3309 accept-proxy
+        bind *:3306
+        mode tcp
+        option clitcpka
+        default_backend galera-nodes
+
+      frontend galera-admin-in
+        bind *:33062
+        mode tcp
+        option clitcpka
+        default_backend galera-admin-nodes
+
+      frontend galera-replica-in
+        bind *:3307
+        mode tcp
+        option clitcpka
+        default_backend galera-replica-nodes
+  proxysql:
+    enabled: false
+    size: 1
+    image: -proxysql
+    resources:
+      requests:
+        memory: 0.1G
+        cpu: 100m
+      limits:
+        memory: 1G
+        cpu: 700m
+    volumeSpec:
+      persistentVolumeClaim:
+        resources:
+          requests:
+            storage: 2Gi
+    affinity:
+      antiAffinityTopologyKey: "kubernetes.io/hostname"
+    podDisruptionBudget:
+      maxUnavailable: 1
+    runtimeClassName: docker-rc
+  pmm:
+    enabled: false
+    image: perconalab/pmm-client:1.17.1
+    serverHost: monitoring-service
+    serverUser: pmm
+    runtimeClassName: docker-rc
+  backup:
+    image: -backup
+    serviceAccountName: default
+    storages:
+      pvc:
+        type: filesystem
+        volume:
+          persistentVolumeClaim:
+            accessModes: [ "ReadWriteOnce" ]
+            resources:
+              requests:
+                storage: 1Gi
+        runtimeClassName: docker-rc
+      aws-s3:
+        type: s3
+        s3:
+          region: us-east-1
+          bucket: operator-testing
+          credentialsSecret: aws-s3-secret
+      minio:
+        type: s3
+        s3:
+          credentialsSecret: minio-secret
+          region: us-east-1
+          bucket: operator-testing
+          endpointUrl: http://minio-service:9000/
+      gcp-cs:
+        type: s3
+        s3:
+          credentialsSecret: gcp-cs-secret
+          region: us-east-1
+          bucket: operator-testing
+          endpointUrl: https://storage.googleapis.com

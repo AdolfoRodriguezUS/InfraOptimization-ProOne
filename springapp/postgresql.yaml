@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+    role: backend
+  name: postgresql
+  namespace: postsql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+      role: backend
+  template:
+    metadata:
+      labels:
+        app: db
+        role: backend
+    spec:
+      containers:
+      - image: postgres:latest
+        name: postgresql
+        env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: passgres
+        ports:
+        - containerPort: 5432
+          name: postgresql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: db
+  name: postgresl
+  namespace: postsql
+spec:
+  type: ClusterIP
+  ports:
+  - name: postgresql-service
+    port: 5432
+    targetPort: 5432
+  selector:
+    app: db

@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  generation: 1
+  name: no-proxysql-ssl
+  ownerReferences:
+    - controller: true
+      kind: PerconaXtraDBCluster
+      name: no-proxysql
+spec:
+  commonName: no-proxysql-proxysql
+  dnsNames:
+    - no-proxysql-pxc
+    - '*.no-proxysql-pxc'
+    - '*.no-proxysql-proxysql'
+  isCA: true
+  issuerRef:
+    kind: Issuer
+    name: no-proxysql-pxc-issuer
+  secretName: no-proxysql-ssl

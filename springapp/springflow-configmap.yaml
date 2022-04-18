@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-cloud-dataflow-server
+  namespace: postsql
+  labels:
+    app: scdf-server
+data:
+  application.yaml: |-
+    spring:
+      cloud:
+        dataflow:
+          task:
+            platform:
+              kubernetes:
+                accounts:
+                  default:
+                    limits:
+                      memory: 1024Mi
+      datasource:
+        url: jdbc:postgresql://postgresl:5432/database
+        username: postgres
+        password: passgres
+        driverClassName: org.postgresql.Driver
+        testOnBorrow: true
+        validationQuery: "SELECT 1"

@@ -1,0 +1,14 @@
+- hosts: tag_Name_MasterU, tag_Name_NodesU 
+  become: yes
+  tasks:
+  - name: Deps
+    import_role:
+      name: common
+      tasks_from: deps
+- hosts: tag_Name_MasterU 
+  become: yes
+  tasks:
+  - name: Deps
+    import_role:
+      name: masters
+      tasks_from: deps
