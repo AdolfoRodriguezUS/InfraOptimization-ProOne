@@ -38,6 +38,22 @@
                 enabled: True
                 gpgcheck: False
 
+        -  name: "Install networking pre-requisites"
+           yum:
+                name: "{{ item }}"
+                state: present
+           loop:
+                - apt-transport-https
+                - ca-certificates
+                - curl
+                - software-properties-common
+        
+        -  name: "Restart Docker Service"
+           service: 
+               name: docker
+               state: restarted
+               enabled: yes
+
         -  name: "Installing kubeadm, kubelet, kubectl"
            yum:
                 name: "{{ k8s_repo_pkg }}"
@@ -102,5 +118,5 @@
         -  name:
            command: "sudo sysctl -p"
 
-        -  name: "Running Master's token to Worker Nodes"
-           shell: "{{ token }}"
+           #        -  name: "Running Master's token to Worker Nodes"
+           #shell: "{{ token }}"

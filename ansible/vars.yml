@@ -14,17 +14,11 @@ k8s_conf_path: /etc/sysctl.d/k8s.conf
 k8s_dir_path: $HOME/.kube
 flannel_url: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 file_dest: ./vars.yml
-token: kubeadm join 172.31.6.24:6443 --token uj6g7x.b89opflgjn3tfu8f --discovery-token-ca-cert-hash sha256:11cb217e4990e035bab53709f125a978b8bb9efd6b0ea254a5a960eb5766ea8c 
-
-
-
-
+token: kubeadm join 172.31.6.66:6443 --token d8uth0.um4rq4mg9965sum4 --discovery-token-ca-cert-hash sha256:94054831fda5dd9bbd2029c168f005d57a542e5cb42e100ca879c3184b458f7f 
+#token: kubeadm join 172.31.3.73:6443 --token lnbz9v.js5f9kov2nid4169 --discovery-token-ca-cert-hash sha256:0f4e82759699f68d40c301e76e9b1697c56d157b6c0a66afac1ad4dbbb72f57f 
+#token: kubeadm join 172.31.6.213:6443 --token xdcbi9.728nfoezmy2efk8w --discovery-token-ca-cert-hash sha256:2ad67d733a5efb8d79cbc541d259b3744612c746015953709841fd385ed75ea5 
+#token: kubeadm join 172.31.4.99:6443 --token 3pvz5h.u2gwpfjjx1y6bv8n --discovery-token-ca-cert-hash sha256:26c2840713c5ac6bda7554624c8d6d41d97730aae07a6e5ac16571b0963b41c6 
+#token: kubeadm join 172.31.6.220:6443 --token u74e2z.g9giiq5smr38ekgb --discovery-token-ca-cert-hash sha256:f11664a66bf31b3dd7faa3460652908d280be52e69c619ce1b6395c74b7f15ed 
  
-
-
-
-
-
-
-
-
+# token: kubeadm join 172.31.12.221:6443 --token mhwcl2.5lbh6ohodjqyjfcw --discovery-token-ca-cert-hash sha256:e6b9929991d3f59808e347c6b6b7fec2598c522e037ddc59587b2aa8774671f0
+# token: kubeadm join 172.31.4.248:6443 --token dw5l5a.acb7t8crc6nqw6qo --discovery-token-ca-cert-hash sha256:4c087267a4447b98a34df2541d3523932103f16694ae19a4107239133829c9b4

@@ -1,11 +1,24 @@
 
+required_providers {
+    aws = {
+          source = "hashicorp/aws"
+          version = "~> 3.0"
+    }
+
+}
+
+
+provider "aws" {
+    region = "us-east-1"
+}
+
 resource "aws_default_vpc" "default" {
   tags = {
     Name = "Default VPC"
   }
 }
 resource "aws_default_subnet" "default_az1" {
-  availability_zone = "us-east-1b"
+  availability_zone = "us-east-1"
   tags = {
     Name = "Default subnet"
   }
@@ -60,9 +73,9 @@ tags = {
   }
 }
 resource "aws_instance" "resMaster" {
-  ami           = "ami-0affd4508a5d2481b"
-  instance_type = "t3.small"
-  key_name = "Aerdevopsrv2"
+  ami           = "ami-04505e74c0741db8d"
+  instance_type = "t2.small"
+  key_name = "aerdevopssrv2"
   security_groups = [ "${aws_security_group.secure.name}" ]
   tags = {
     Name = "Master"
@@ -72,9 +85,9 @@ resource "aws_instance" "resMaster" {
   }
 }
 resource "aws_instance" "resNodes" {
-  ami = "ami-0affd4508a5d2481b"
-  instance_type = "t3.small"
-  key_name = "Aerdevopsrv2"
+  ami = "ami-04505e74c0741db8d"
+  instance_type = "t2.small"
+  key_name = "aerdevopssrv2"
   count = 3
   security_groups = [ "${aws_security_group.secure.name}" ]
   tags = {

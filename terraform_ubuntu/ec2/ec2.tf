@@ -61,7 +61,7 @@ tags = {
 }
 resource "aws_instance" "resMasterU" {
   ami           = "ami-04505e74c0741db8d"
-  instance_type = "t3.small"
+  instance_type = "t3a.medium"
   key_name = "Aerdevopsrv2"
   security_groups = [ "${aws_security_group.secureubuntu.name}" ]
   tags = {
@@ -73,7 +73,7 @@ resource "aws_instance" "resMasterU" {
 }
 resource "aws_instance" "resNodesU" {
   ami = "ami-04505e74c0741db8d"
-  instance_type = "t3.small"
+  instance_type = "t3a.medium"
   key_name = "Aerdevopsrv2"
   count = 3
   security_groups = [ "${aws_security_group.secureubuntu.name}" ]

@@ -52,7 +52,25 @@
                 gpgcheck: False
                 repo_gpgcheck: False
            register: repo
-       
+
+        -  name: "Install networking pre-requisites"
+           yum:
+                name: "{{ item }}"
+                state: present
+           loop:
+                - apt-transport-https
+                - ca-certificates
+                - curl
+                - software-properties-common
+
+        -  name: "Restart Docker Service"
+           service:
+               name: docker
+               state: restarted
+               enabled: yes
+ 
+
+
         -  name: "Installing kubeadm, kubelet, kubectl"
            yum: 
                 name: "{{ k8s_repo_pkg }}"
@@ -104,9 +122,10 @@
         
        
         -  name: "Starting the Cluster"
-           command: "kubeadm init --pod-network-cidr={{ cidr_range }} --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem"     
+           command: "kubeadm init --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem"     
            register: master_config                 
-        
+           #--pod-network-cidr={{ cidr_range }}
+
         -  name: debug
            debug: 
                 msg: "{{ master_config }}"
@@ -134,8 +153,17 @@
                 dest: "/k8s/"
            ignore_errors: yes
 
-        -  name: "Installing Flannel"
-           command: "kubectl apply -f kube-flannel.yml"
+        -  name: "Generate kubectl version string for network requirement"
+           ansible.builtin.shell: kubectl version | base64 | tr -d '\n'
+           register: weave_version
+
+        -  name: "DEBUG"
+           debug:
+                msg: "https://cloud.weave.works/k8s/net?k8s-version={{ weave_version.stdout }}{{ weave_version }}"
+        
+        -  name: "Installing Weave Network Driver"
+           shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version={{ weave_version.stdout }}"
+           # kube-flannel.yml"
            args:
                 chdir: /k8s/
            ignore_errors: yes

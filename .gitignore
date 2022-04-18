@@ -23,4 +23,4 @@ terraform.rc
 *.pem
 **/terraform/creds.tf
 terraform/creds.tf
-
+creds.*

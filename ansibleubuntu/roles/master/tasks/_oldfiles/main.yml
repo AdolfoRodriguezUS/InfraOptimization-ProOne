@@ -1,0 +1,6 @@
+
+            - include:  1_initialize.yml
+            - include:  2_configure_masteru.yml
+            - include:  3_initialize_masteru.yml
+
+

@@ -1,10 +1,28 @@
+terraform {
+    required_providers {
+        aws = {
+               source = "hashicorp/aws"
+               version = "~> 4.4"
+        }
+    }
+
+}
+
+
+provider "aws" {
+     
+    region = "us-east-1"
+    profile = "default"
+}
+
+
 resource "aws_default_vpc" "default" {
   tags = {
     Name = "Default VPC"
   }
 }
 resource "aws_default_subnet" "default_az1" {
-  availability_zone = "us-east-1"
+  availability_zone = "us-east-1b"
   tags = {
     Name = "Default subnet"
   }
@@ -48,6 +66,14 @@ ingress {
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+    ingress {
+    description = "all-in"
+    from_port = 0
+    to_port   = 0
+    protocol  = "all"
+    cidr_blocks = ["0.0.0.0/0"]
+    self      = true
+ }
 egress {
   from_port   = 0
   to_port     = 0
@@ -59,9 +85,9 @@ tags = {
   }
 }
 resource "aws_instance" "resMaster" {
-  ami           = "ami-04505e74c0741db8d"
-  instance_type = "t2.micro"
-  key_name = "aerdevopsserver"
+  ami           = "ami-0affd4508a5d2481b"
+  instance_type = "t3a.medium"
+  key_name = "Aerdevopsrv2"
   security_groups = [ "${aws_security_group.secure.name}" ]
   tags = {
     Name = "Master"
@@ -71,9 +97,9 @@ resource "aws_instance" "resMaster" {
   }
 }
 resource "aws_instance" "resNodes" {
-  ami = "ami-04505e74c0741db8d"
-  instance_type = "t2.micro"
-  key_name = "aerdevopsserver"
+  ami = "ami-0affd4508a5d2481b"
+  instance_type = "t3a.medium"
+  key_name = "Aerdevopsrv2"
   count = 3
   security_groups = [ "${aws_security_group.secure.name}" ]
   tags = {
